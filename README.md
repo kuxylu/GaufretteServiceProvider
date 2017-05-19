@@ -1,7 +1,7 @@
-GaufretteServiceProvider
+GaufretteServiceProvider for Silex with Pimple 2x
 ================
 
-The GaufretteServiceProvider provides the "Gaufrette" library for silex.
+The GaufretteServiceProvider provides the "Gaufrette" library for silex using Pimple 2x libruary.
 
 Installation
 ------------
@@ -10,7 +10,7 @@ Create a composer.json your project
 
     {
         "require": {
-            "bt51/gaufrette-serviceprovider": "dev-master"
+            "kuxylu/gaufrette-serviceprovider": "dev-master"
         }
     }
 
