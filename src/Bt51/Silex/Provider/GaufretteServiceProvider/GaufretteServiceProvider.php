@@ -11,27 +11,28 @@
 
 namespace Bt51\Silex\Provider\GaufretteServiceProvider;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Cache;
 
 class GaufretteServiceProvider implements ServiceProviderInterface
 {
-    public function register(Application $app)
+    public function register(Container $app)
     {
         if (! isset($app['gaufrette.adapter.class'])) {
             $app['gaufrette.adapter.class'] = 'Local';
         }
 
-        $app['gaufrette.adapter'] = $app->share(function ($app) {
+	    $app['gaufrette.adapter'] = function () use ($app) {
             $options = (isset($app['gaufrette.options']) ? $app['gaufrette.options'] : array());
             $class = sprintf('\\Gaufrette\\Adapter\\%s', $app['gaufrette.adapter.class']);
             $adapter = new \ReflectionClass($class);
             return $adapter->newInstanceArgs($options);
-        });
+
+};
         
-        $app['gaufrette.adapter.cache'] = $app->share(function ($app) {
+	$app['gaufrette.adapter.cache'] = function () use ($app) {
             if (! isset($app['gaufrette.adapter.cache.class'])) {
                 return false;
             }
@@ -39,7 +40,7 @@ class GaufretteServiceProvider implements ServiceProviderInterface
             $class = sprintf('\\Gaufrette\\Adapter\\%s', $app['gaufrette.adapter.cache.class']);
             $adapter = new \ReflectionClass($class);
             return $adapter->newInstanceArgs($options);
-        });  
+        };  
     }
     
     public function boot(Application $app)
