@@ -11,7 +11,9 @@
 
 namespace Bt51\Silex\Provider\GaufretteServiceProvider;
 
+//use Silex\Application;
 use Pimple\Container;
+//use Silex\ServiceProviderInterface;
 use Pimple\ServiceProviderInterface;
 use Gaufrette\Filesystem;
 use Gaufrette\Adapter\Cache;
@@ -41,23 +43,32 @@ class GaufretteServiceProvider implements ServiceProviderInterface
             $adapter = new \ReflectionClass($class);
             return $adapter->newInstanceArgs($options);
         };  
-    }
-    
-    public function boot(Application $app)
-    {
-        if ($app['gaufrette.adapter.cache']) {
-            $app['gaufrette.cache'] = $app->share(function ($app) {
-                $ttl = isset($app['gaufrette.cache.ttl']) ? $app['gaufrette.cache.ttl'] : 0;
-                return new Cache($app['gaufrette.adapter'], $app['gaufrette.adapter.cache'], $ttl);
-            });
-        }
-        
-        $app['gaufrette.filesystem'] = $app->share(function ($app) {
+
+        $app['gaufrette.filesystem'] = function() use ($app) {
             if (isset($app['gaufrette.cache'])) {
                 return new Filesystem($app['gaufrette.cache']);
             }
             
             return new Filesystem($app['gaufrette.adapter']);
-        }); 
+        }; 
+
+    }
+    
+    public function boot(Application $app)
+    {
+        if ($app['gaufrette.adapter.cache']) {
+            $app['gaufrette.cache'] = function () use ($app) {
+                $ttl = isset($app['gaufrette.cache.ttl']) ? $app['gaufrette.cache.ttl'] : 0;
+                return new Cache($app['gaufrette.adapter'], $app['gaufrette.adapter.cache'], $ttl);
+            };
+        }
+        
+        $app['gaufrette.filesystem'] = function () use ($app) {
+            if (isset($app['gaufrette.cache'])) {
+                return new Filesystem($app['gaufrette.cache']);
+            }
+            
+            return new Filesystem($app['gaufrette.adapter']);
+        }; 
     }
 }
