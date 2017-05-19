@@ -1,14 +1,18 @@
 {
-	"name": "bt51/gaufrette-serviceprovider",
+	"name": "kuxylu/gaufrette-serviceprovider",
 	"keywords": ["silex", "extension", "silex-extension", "gaufrette"],
 	"type": "library",
 	"license": "MIT",
-	"description": "Gaufrette service provider for silex",
-	"homepage": "https://github.com/bt51/GaufretteServiceProvider",
+	"description": "Gaufrette service provider for silex/pimple",
+	"homepage": "https://github.com/kuxylu/GaufretteServiceProvider",
 	"authors": [
 		{
 			"name": "Ben Tollakson",
 			"email": "btollakson.os@gmail.com"
+		},
+		{
+			"name": "Kuxylu",
+			"email": "kuxylu@gmail.com"
 		}
 	],
 	"require": {
@@ -16,7 +20,7 @@
 		"knplabs/gaufrette": "dev-master@dev"
 	},
 	"require-dev": {
-        "silex/silex": "1.0.x-dev"
+        "silex/silex": "~2.0"
     },
 	"autoload": {
 		"psr-0": {
